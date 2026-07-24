@@ -548,6 +548,37 @@
     }
   }
 
+  async function confirmJoin(){
+    const room = (urlJoin && urlRoom) ? urlRoom : roomInput.value.trim().toUpperCase();
+    joinErr.textContent = '';
+    if(!room || room.length < 4){ joinErr.textContent = '請輸入正確的房間代碼'; return; }
+
+    roomId = room;
+    myPlayerId = genPlayerId();
+
+    // avoid duplicate identity within the same room (best-effort; a stale read here
+    // can at worst produce a rare cosmetic duplicate name, never lost data)
+    const players = await getJSON(playersKey(roomId), true) || {};
+    const takenNames = new Set(Object.values(players).map(p => p && p.name).filter(Boolean));
+    let candidate = currentIdentity.emoji + ' ' + currentIdentity.title;
+    let tries = 0;
+    while(takenNames.has(candidate) && tries < 6){
+      currentIdentity = generateIdentity();
+      candidate = currentIdentity.emoji + ' ' + currentIdentity.title;
+      tries++;
+    }
+    if(takenNames.has(candidate)){
+      candidate = candidate + ' #' + (1 + Math.floor(Math.random()*90));
+    }
+    playerDisplayName = candidate;
+    playerSlogan = currentIdentity.slogan;
+
+    // each device writes ONLY its own child node — concurrent joins never overwrite each other
+    await setChild(playersKey(roomId), myPlayerId, { name: playerDisplayName, slogan: playerSlogan, joinedAt: Date.now() });
+
+    startPlayer();
+  }
+
   /* ---------------- HOST ---------------- */
   const hostBigNumberEl = document.getElementById('hostBigNumber');
   const roundTagEl = document.getElementById('roundTag');
@@ -564,14 +595,6 @@
   const playersList = document.getElementById('playersList');
 
   let winnerShownForRound = false;
-
-  // Dedicated entry points: host link (?role=host) skips straight to the host console;
-  // player QR link (?room=XXX&join=1) skips straight to identity + join, no role picker shown.
-  if(urlRole === 'host'){
-    startHost();
-  } else if(urlJoin && urlRoom){
-    openJoinForm(true);
-  }
 
   const randomCallBtn = document.getElementById('randomCallBtn');
   randomCallBtn.addEventListener('click', () => {
@@ -837,6 +860,14 @@
   document.getElementById('overlayClose').addEventListener('click', () => {
     overlay.classList.add('hidden');
   });
+
+  // Dedicated entry points: host link (?role=host) skips straight to the host console;
+  // player QR link (?room=XXX&join=1) skips straight to identity + join, no role picker shown.
+  if(urlRole === 'host'){
+    startHost();
+  } else if(urlJoin && urlRoom){
+    openJoinForm(true);
+  }
 })();
 </script>
 </body>
