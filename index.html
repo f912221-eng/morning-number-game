@@ -40,7 +40,7 @@
   .mono{font-family:'Space Mono', monospace; letter-spacing:0.5px;}
   .display{font-family:'Archivo Black', 'Arial Black', sans-serif;}
   button{font-family:inherit; cursor:pointer; border:none;}
-  .screen{flex:1; display:flex; flex-direction:column; padding:24px; width:100%; max-width:920px; margin:0 auto;}
+  .screen{flex:1; display:flex; flex-direction:column; padding:24px; width:100%; max-width:920px; margin:0 auto; overflow-y:auto; -webkit-overflow-scrolling:touch;}
   .hidden{display:none !important;}
 
   .eyebrow{
@@ -228,19 +228,30 @@
     75%{transform:translateX(6px);}
   }
 
-  /* ---------- Small-phone tweaks ---------- */
-  @media (max-width: 420px){
-    .screen{padding:12px;}
-    .grid{grid-template-columns:repeat(5, 1fr); gap:6px;}
+  /* ---------- Mobile phone tweaks ---------- */
+  @media (max-width: 600px){
+    .screen{padding:10px;}
+    .player-bar{padding:8px 12px; margin-bottom:8px;}
+    .player-bar .who{font-size:13px; gap:6px;}
+    .player-bar .who .em{font-size:20px;}
+    .player-bar .score-badge{padding:4px 10px; font-size:12px;}
+    .call-banner{padding:8px 10px; margin-bottom:10px; border-radius:14px;}
+    .call-banner .lbl{font-size:11px; letter-spacing:1px;}
+    .call-banner .num{font-size:clamp(26px, 7.5vw, 36px); margin-top:2px;}
+    .call-banner.waiting .num{font-size:14px;}
+    .grid{grid-template-columns:repeat(5, 1fr); gap:6px; flex:none;}
     .host-grid{grid-template-columns:repeat(5, 1fr); gap:6px;}
-    .num-btn, .host-num-btn{min-height:42px; font-size:clamp(16px, 4.5vw, 22px); padding:4px;}
-    .call-banner{padding:12px 10px; margin-bottom:12px;}
-    .call-banner .num{font-size:clamp(42px, 14vw, 64px);}
-    .identity-emoji{font-size:52px;}
-    .role-wrap .headline{font-size:34px;}
-    .host-top-row{flex-wrap:wrap; gap:10px;}
-    .join-panel{padding:16px; gap:14px;}
-    .join-panel .qr-box{width:120px; height:120px;}
+    .num-btn, .host-num-btn{
+      aspect-ratio:auto; height:42px; min-height:38px;
+      font-size:clamp(16px, 4.5vw, 20px); border-radius:10px;
+      box-shadow:0 3px 0 #060915; padding:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .identity-emoji{font-size:48px;}
+    .role-wrap .headline{font-size:30px;}
+    .host-top-row{flex-wrap:wrap; gap:8px;}
+    .join-panel{padding:14px; gap:12px;}
+    .join-panel .qr-box{width:110px; height:110px;}
   }
 
   /* ---------- Overlay ---------- */
