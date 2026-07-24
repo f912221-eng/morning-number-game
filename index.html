@@ -230,9 +230,12 @@
 
   /* ---------- Small-phone tweaks ---------- */
   @media (max-width: 420px){
-    .screen{padding:14px;}
-    .grid{grid-template-columns:repeat(4, 1fr); gap:8px;}
-    .host-grid{grid-template-columns:repeat(4, 1fr); gap:8px;}
+    .screen{padding:12px;}
+    .grid{grid-template-columns:repeat(5, 1fr); gap:6px;}
+    .host-grid{grid-template-columns:repeat(5, 1fr); gap:6px;}
+    .num-btn, .host-num-btn{min-height:42px; font-size:clamp(16px, 4.5vw, 22px); padding:4px;}
+    .call-banner{padding:12px 10px; margin-bottom:12px;}
+    .call-banner .num{font-size:clamp(42px, 14vw, 64px);}
     .identity-emoji{font-size:52px;}
     .role-wrap .headline{font-size:34px;}
     .host-top-row{flex-wrap:wrap; gap:10px;}
